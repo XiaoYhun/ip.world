@@ -29,19 +29,6 @@ export const revalidate = 30
 const isEmpty = (value: unknown) =>
   value == null || (Array.isArray(value) && value.length === 0) || (typeof value === "object" && Object.keys(value as object).length === 0)
 
-const getExploreData = async () => {
-  try {
-    const res = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/explore`, {
-      next: { revalidate: 30 },
-    })
-    const data = await res.json()
-
-    return data
-  } catch (error) {
-    console.error("Fetch Explore Error:", error)
-    return []
-  }
-}
 
 const getTrendingTokensData = async () => {
   try {
@@ -115,24 +102,21 @@ export default async function IpExplorePage(props: { searchParams: Promise<Searc
   const searchParams = await props.searchParams
 
   const [
-    exploreData,
     initialTrendingTokensData,
     initialAboutToGraduateTokensData,
     initialTiktokTokensData,
     homepageRemixesData,
   ] = await Promise.all([
-    getExploreData(),
     getTrendingTokensData(),
     getAboutToGraduateTokensData(),
     getTiktokTokensData(),
     getHomepageRemixesData(searchParams),
   ])
 
-  // /explore can answer with a payload that is technically non-empty but carries
-  // no usable figures, so check the field the hero actually renders. A zero here
-  // means the endpoint responded but has nothing to show, which reads as broken.
-  const exploreIsEmpty =
-    isEmpty(exploreData) || !((exploreData as { total_user_rewards?: number })?.total_user_rewards > 0)
+  // /explore does answer with live figures, but they are far smaller than the
+  // fixture coins the rest of this page shows - a few thousand dollars of
+  // rewards above millions in fake market caps reads as broken. Keep the hero on
+  // the fixture so the page is internally consistent.
   const trendingIsEmpty = isEmpty(initialTrendingTokensData)
   const graduatingIsEmpty = isEmpty(initialAboutToGraduateTokensData)
   const tiktokIsEmpty = isEmpty(initialTiktokTokensData)
@@ -140,7 +124,7 @@ export default async function IpExplorePage(props: { searchParams: Promise<Searc
 
   return (
     <ClientContent
-      exploreData={exploreIsEmpty ? MOCK_EXPLORE : exploreData}
+      exploreData={MOCK_EXPLORE}
       initialTrendingTokensData={trendingIsEmpty ? MOCK_TRENDING_TOKENS : initialTrendingTokensData}
       initialAboutToGraduateTokensData={
         graduatingIsEmpty ? MOCK_ABOUT_TO_GRADUATE_TOKENS : initialAboutToGraduateTokensData
