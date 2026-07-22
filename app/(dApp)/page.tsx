@@ -129,9 +129,10 @@ export default async function IpExplorePage(props: { searchParams: Promise<Searc
   ])
 
   // /explore can answer with a payload that is technically non-empty but carries
-  // none of the fields the hero reads, so check for the field we actually use.
+  // no usable figures, so check the field the hero actually renders. A zero here
+  // means the endpoint responded but has nothing to show, which reads as broken.
   const exploreIsEmpty =
-    isEmpty(exploreData) || (exploreData as { total_user_rewards?: number })?.total_user_rewards == null
+    isEmpty(exploreData) || !((exploreData as { total_user_rewards?: number })?.total_user_rewards > 0)
   const trendingIsEmpty = isEmpty(initialTrendingTokensData)
   const graduatingIsEmpty = isEmpty(initialAboutToGraduateTokensData)
   const tiktokIsEmpty = isEmpty(initialTiktokTokensData)

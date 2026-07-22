@@ -5,6 +5,8 @@ import { PAGINATION_LIMIT } from "@/lib/constants"
 import { Remix } from "@/types/remix"
 import { fetchRemixes } from "./actions"
 import RemixesClient from "./remixes-client"
+import { MOCK_COINS } from "@/constants/homepageMocks"
+import DemoDataNotice from "../components/demo-data-notice"
 
 const DEFAULT_SORT = "trending_score_24h"
 const DEFAULT_ORDER = "desc"
@@ -46,7 +48,11 @@ export default async function ExplorePage(props: { searchParams: Promise<SearchP
     hide_spam: hide_spam !== "false",
   })
 
-  const remixes = response.results ?? []
+  // Same fallback as the homepage: an unreachable/empty /remixes leaves this
+  // page as a bare "No coins found" shell, so substitute fixtures and say so.
+  const liveRemixes = response.results ?? []
+  const usingMockData = liveRemixes.length === 0
+  const remixes = usingMockData ? MOCK_COINS : liveRemixes
 
   const featuredRemix = await getFeaturedRemix()
   // Fall back to highest mcap token if no featured/bonded token
@@ -56,6 +62,11 @@ export default async function ExplorePage(props: { searchParams: Promise<SearchP
   return (
     <div className="relative mt-14 w-full md:mt-0">
       <section className="relative">
+        {usingMockData && (
+          <div className="w-full px-3 pb-4 sm:px-4">
+            <DemoDataNotice />
+          </div>
+        )}
         {!!heroRemix && !!heroRemix.token_address && (
           <div className="hidden sm:block">
             <FeaturedRemixCard data={heroRemix} />
@@ -64,7 +75,7 @@ export default async function ExplorePage(props: { searchParams: Promise<SearchP
 
         <div className="w-full px-3 sm:px-4">
           {remixes ? (
-            <RemixesClient initialRemixes={remixes} total={response.total} />
+            <RemixesClient initialRemixes={remixes} total={usingMockData ? MOCK_COINS.length : response.total} />
           ) : (
             <EmptyState />
           )}

@@ -10,8 +10,9 @@ export default function DemoDataNotice() {
     <div className="flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3.5 py-2.5 text-[13px] leading-relaxed text-amber-200/85 sm:items-center sm:text-sm">
       <Info size={15} className="mt-0.5 shrink-0 text-amber-400/80 sm:mt-0" />
       <p>
-        <span className="font-medium text-amber-200">Demo data.</span> This deployment can&apos;t reach its backend API, so
-        the coins, prices, market caps and holder counts below are fabricated sample values — not real market data.
+        <span className="font-medium text-amber-200">Demo data.</span> Coin data isn&apos;t available on this deployment,
+        so the coins, prices, market caps and holder counts shown here are fabricated sample values — not real market
+        data.
       </p>
     </div>
   )

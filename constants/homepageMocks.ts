@@ -152,6 +152,17 @@ export const MOCK_ABOUT_TO_GRADUATE_TOKENS: Remix[] = ABOUT_TO_GRADUATE_SEEDS.ma
 export const MOCK_TIKTOK_TOKENS: Remix[] = TIKTOK_SEEDS.map((s, i) => makeToken(s, i, "tiktok"))
 export const MOCK_HOMEPAGE_REMIXES: Remix[] = REMIX_SEEDS.map((s, i) => makeToken(s, i, "remix"))
 
+/**
+ * Everything above, combined, for the /coins grid. Group prefixes keep ids and
+ * token addresses unique across the concatenation.
+ */
+export const MOCK_COINS: Remix[] = [
+  ...MOCK_TRENDING_TOKENS,
+  ...MOCK_TIKTOK_TOKENS,
+  ...MOCK_HOMEPAGE_REMIXES,
+  ...MOCK_ABOUT_TO_GRADUATE_TOKENS,
+]
+
 const VIRAL_IP_SEEDS = [
   { title: "Pixel Otter", category: "pet", viralScore: 96.2, remixes: 1284, marketCap: 4210000 },
   { title: "Dance Ghost", category: "character", viralScore: 91.7, remixes: 968, marketCap: 3120000 },
@@ -163,7 +174,7 @@ const VIRAL_IP_SEEDS = [
 
 export const MOCK_EXPLORE: Explore = {
   total_remixes: 48213,
-  total_user_rewards: 1284630.42,
+  total_user_rewards: 12847392.65,
   viral_ips: {
     total: VIRAL_IP_SEEDS.length,
     limit: VIRAL_IP_SEEDS.length,
