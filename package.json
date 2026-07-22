@@ -33,7 +33,7 @@
     "@dynamic-labs/wagmi-connector": "^4.79.0",
     "@electric-sql/client": "^1.5.16",
     "@electric-sql/react": "^1.0.45",
-    "@halliday-sdk/payments": "^0.1.0",
+    "@halliday-sdk/payments": "^3.2.0",
     "@number-flow/react": "^0.6.0",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-checkbox": "^1.1.4",
