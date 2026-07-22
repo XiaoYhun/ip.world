@@ -111,5 +111,25 @@ export default function CountUp({
     return () => unsubscribe();
   }, [springValue, formatValue]);
 
+  // The spring above is driven by useInView, which does not always fire here -
+  // this file imports from motion/react while the rest of the app imports from
+  // framer-motion, so the two run as separate instances. Without this the span
+  // is left showing the `from` value forever. Paint the target once the
+  // animation window has elapsed so the real figure is never lost.
+  useEffect(() => {
+    if (!startWhen) return;
+
+    const settleId = setTimeout(
+      () => {
+        if (ref.current) {
+          ref.current.textContent = formatValue(direction === 'down' ? from : to);
+        }
+      },
+      delay * 1000 + duration * 1000 + 100
+    );
+
+    return () => clearTimeout(settleId);
+  }, [startWhen, direction, from, to, delay, duration, formatValue]);
+
   return <span className={className} ref={ref} />;
 }
