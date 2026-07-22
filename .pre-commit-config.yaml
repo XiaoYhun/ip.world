@@ -1,0 +1,17 @@
+repos:
+  - repo: https://github.com/qoomon/git-conventional-commits
+    rev: v2.6.3
+    hooks:
+      - id: conventional-commits
+  - repo: local
+    hooks:
+      - id: lint-fix
+        name: Run ESLint Fix
+        entry: pnpm lint:fix
+        language: system
+        pass_filenames: false
+      - id: prettier-fix
+        name: Run Prettier Fix
+        entry: pnpm prettier:fix
+        language: system
+        files: \.(js|jsx|ts|tsx|css|md|mdx)$

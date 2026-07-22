@@ -1,0 +1,131 @@
+/* TradingView Custom Styles */
+
+/*
+ * Library defaults use darker grays for toolbar chrome (#1a1a1a) and group dividers (#303030)
+ * while the chart pane uses toolbar_bg / overrides (#0d0d0d). Align themed tokens so the
+ * header strip, pseudo-element separators, and chart body read as one surface.
+ */
+html.theme-dark {
+  --themed-color-pane-bg: #0d0d0d;
+  --themed-color-chart-page-bg: #0d0d0d;
+  --themed-color-bg-separator: #0d0d0d;
+  --themed-color-separator: #0d0d0d;
+}
+
+html.theme-light {
+  --themed-color-pane-bg: #ffffff;
+  --themed-color-chart-page-bg: #ffffff;
+  --themed-color-bg-separator: #ffffff;
+  --themed-color-separator: #e0e0e0;
+}
+
+/* Remove TradingView branding */
+.tv-header__special-button,
+.tv-header__link--tradingview {
+  display: none !important;
+}
+
+/* Customize scrollbars */
+.tv-scrollbar-wrap::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.tv-scrollbar-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tv-scrollbar-wrap::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 4px;
+}
+
+.tv-scrollbar-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.5);
+}
+
+/* Customize dialogs */
+.tv-dialog {
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Customize buttons */
+.tv-button {
+  border-radius: 6px !important;
+}
+
+/* ─── Chart chrome: header + toolbar flush with #0d0d0d pane ─── */
+html.theme-dark .tv-header,
+html.theme-dark .chart-controls-bar {
+  background-color: #0d0d0d !important;
+}
+
+html.theme-dark .tv-header__group {
+  border-color: transparent !important;
+}
+
+html.theme-dark .chart-container-border {
+  border-color: rgba(38, 38, 38, 0.95) !important;
+}
+
+html.theme-light .tv-header,
+html.theme-light .chart-controls-bar {
+  background-color: #ffffff !important;
+}
+
+html.theme-light .chart-container-border {
+  border-color: rgba(229, 229, 229, 0.95) !important;
+}
+
+/* Remove unnecessary elements */
+.tv-main-panel__symbol-right-part,
+.tv-symbol-header__exchange {
+  display: none !important;
+}
+
+/* Customize chart area */
+.chart-markup-table {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif !important;
+}
+
+/*
+ * Right-hand price scale: TradingView sets width/minWidth inline from the widest measured label
+ * (often the neon “last price” pill). That can leave a wide gutter after labels become compact.
+ * Cap the right column only (last flex child in each pane row: left scale | chart | right scale).
+ */
+.chart-markup-table.price-axis-container:last-child {
+  max-width: min(118px, 28vw) !important;
+  min-width: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .chart-markup-table.price-axis-container:last-child {
+    max-width: min(132px, 12vw) !important;
+  }
+}
+
+/* Improve mobile responsiveness */
+@media (max-width: 768px) {
+  .tv-header {
+    height: 40px !important;
+  }
+
+  .tv-header__title {
+    font-size: 14px !important;
+  }
+
+  /* Slightly smaller scale text so the library measures a narrower price column (pairs with compact formatter). */
+  .chart-markup-table .price-axis {
+    font-size: 11px !important;
+  }
+
+  .chart-markup-table.price-axis-container:last-child {
+    max-width: min(104px, 30vw) !important;
+  }
+}

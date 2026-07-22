@@ -1,0 +1,38 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - dev-v2
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+          run_install: false
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: "use node ${{ env.node_version }}"
+        uses: actions/setup-node@v6
+        with:
+          node-version: "${{ env.node_version }}"
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint check
+        run: pnpm lint
+      - name: Format check
+        run: pnpm prettier
+      - name: Unit & Integration tests
+        run: pnpm test

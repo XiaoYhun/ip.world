@@ -1,0 +1,113 @@
+"use client"
+
+import { useState } from "react"
+import { Remix } from "@/types/remix"
+import { CircleMinus } from "../icons"
+
+interface EndorsementIndicatorProps {
+  remix: Remix
+  className?: string
+  iconOnly?: boolean
+}
+
+export default function EndorsementIndicator({ remix, className = "", iconOnly = false }: EndorsementIndicatorProps) {
+  const [isHovered, setIsHovered] = useState(false)
+  const endorsement = remix.owner_endorsement
+
+  if (!endorsement || endorsement === "none") {
+    return null
+  }
+
+  const getIndicatorConfig = () => {
+    switch (endorsement) {
+      case "official":
+        return {
+          icon: <svg xmlns="http://www.w3.org/2000/svg" width={iconOnly ? 16 : 12} height={iconOnly ? 16 : 12} viewBox="0 0 10 10" fill="none">
+            <g clipPath="url(#clip_endorse_official)">
+              <path fillRule="evenodd" clipRule="evenodd" d="M6.07241 0.51831C5.7517 0.315776 5.37999 0.208276 5.00066 0.208252C4.62129 0.208252 4.24962 0.315791 3.92887 0.51831C3.70696 0.658477 3.51613 0.840869 3.36532 1.05298C3.10894 1.00977 2.84554 1.01519 2.58976 1.07292C2.21966 1.15649 1.88068 1.34338 1.61239 1.61165C1.34409 1.87996 1.15723 2.21891 1.07365 2.58903C1.01589 2.84484 1.01049 3.10817 1.05371 3.36458C0.841594 3.51539 0.659219 3.70623 0.519044 3.92814C0.316486 4.24892 0.208984 4.62054 0.208984 4.99992C0.208984 5.37929 0.316486 5.75092 0.519044 6.07171C0.659177 6.29354 0.841677 6.48404 1.05371 6.63483C1.01042 6.89138 1.01586 7.15488 1.07365 7.41079C1.15723 7.78092 1.34409 8.11988 1.61239 8.38817C1.88068 8.65646 2.21966 8.84333 2.58976 8.92692C2.84556 8.98467 3.10892 8.98967 3.36532 8.94646C3.51616 9.15867 3.70686 9.34129 3.92887 9.48154C4.24962 9.68404 4.62129 9.79158 5.00066 9.79158C5.37999 9.79154 5.7517 9.68404 6.07241 9.48154C6.29437 9.34133 6.48479 9.15858 6.63558 8.94646C6.89212 8.98975 7.15562 8.98471 7.41154 8.92692C7.78162 8.84333 8.12062 8.65646 8.38891 8.38817C8.6572 8.11988 8.84408 7.78092 8.92766 7.41079C8.98545 7.15471 8.99054 6.89113 8.9472 6.63446C9.15916 6.48358 9.34179 6.29358 9.48187 6.07171C9.65904 5.79096 9.76337 5.47121 9.78662 5.1415L9.79191 4.99992C9.79195 4.62058 9.68433 4.24892 9.48187 3.92814C9.34175 3.70618 9.15925 3.51586 8.9472 3.36499C8.99049 3.10845 8.98545 2.84498 8.92766 2.58903C8.84408 2.21894 8.6572 1.87995 8.38891 1.61165C8.12062 1.34338 7.78162 1.15651 7.41154 1.07292C7.15562 1.01514 6.89208 1.00971 6.63558 1.05298C6.48479 0.840956 6.29425 0.658444 6.07241 0.51831ZM4.8624 6.58343L7.219 4.22684L6.55246 3.56029L4.52913 5.58362L3.44845 4.50293L2.7819 5.16947L4.19586 6.58343C4.37991 6.76748 4.67835 6.76748 4.8624 6.58343Z" fill="#C093FF" />
+            </g>
+            <defs><clipPath id="clip_endorse_official"><rect width="10" height="10" fill="white" /></clipPath></defs>
+          </svg>,
+          text: "Official Token",
+          backgroundColor: "#C093FF40",
+          hoverBackgroundColor: "#472542",
+          borderColor: "#C093FF",
+          textColor: "#C093FF",
+        }
+      case "liked":
+        return {
+          icon: <svg width={iconOnly ? 16 : 10} height={iconOnly ? 16 : 10} viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M11.5 0C12.4104 5.80152e-05 13.3025 0.258058 14.0722 0.74414C14.6046 1.08046 15.0619 1.51849 15.4238 2.02734C16.0394 1.9235 16.6719 1.93653 17.2861 2.0752C18.1743 2.27581 18.9879 2.7243 19.6318 3.36816C20.2757 4.01208 20.7242 4.82564 20.9248 5.71387C21.0635 6.32814 21.0756 6.96047 20.9717 7.57617C21.4806 7.93826 21.9186 8.39504 22.2549 8.92773C22.7408 9.6976 22.9991 10.5896 22.999 11.5L22.9863 11.8398C22.9305 12.6311 22.6801 13.3985 22.2549 14.0723C21.9187 14.6048 21.4804 15.0608 20.9717 15.4229C21.0757 16.0389 21.0635 16.6715 20.9248 17.2861C20.7242 18.1744 20.2757 18.9879 19.6318 19.6318C18.9879 20.2757 18.1743 20.7242 17.2861 20.9248C16.6719 21.0635 16.0395 21.0756 15.4238 20.9717C15.0619 21.4808 14.6049 21.9194 14.0722 22.2559C13.3025 22.7419 12.4104 22.9999 11.5 23C10.5895 23 9.69752 22.7419 8.92773 22.2559C8.39491 21.9193 7.93721 21.481 7.57519 20.9717C6.95984 21.0754 6.32777 21.0634 5.71386 20.9248C4.82563 20.7242 4.01207 20.2757 3.36816 19.6318C2.72424 18.9879 2.27578 18.1744 2.07519 17.2861C1.9365 16.6719 1.92344 16.0395 2.02734 15.4238C1.51846 15.0619 1.08046 14.6047 0.744143 14.0723C0.258003 13.3024 0 12.4105 0 11.5C0 10.5895 0.258003 9.6976 0.744143 8.92773C1.08056 8.39514 1.51826 7.93713 2.02734 7.5752C1.92362 6.9598 1.93657 6.32781 2.07519 5.71387C2.27578 4.82559 2.72424 4.01209 3.36816 3.36816C4.01207 2.72431 4.82563 2.27576 5.71386 2.0752C6.32772 1.93664 6.9599 1.92364 7.57519 2.02734C7.93714 1.51828 8.39513 1.08054 8.92773 0.74414C9.69752 0.258093 10.5895 0 11.5 0ZM13.7222 7.5C13.2878 7.50843 12.8612 7.61949 12.4757 7.82452C12.0902 8.02954 11.7562 8.32297 11.5 8.68186C11.2438 8.32297 10.9098 8.02954 10.5243 7.82452C10.1388 7.61949 9.7122 7.50843 9.27778 7.5C8.54134 7.5009 7.83531 7.80051 7.31457 8.33311C6.79382 8.86571 6.50088 9.58781 6.5 10.341C6.5 13.461 11.0133 16.3822 11.2061 16.5049C11.2943 16.5611 11.3961 16.5909 11.5 16.5909C11.6039 16.5909 11.7057 16.5611 11.7939 16.5049C11.9867 16.3822 16.5 13.461 16.5 10.341C16.4991 9.58781 16.2062 8.86571 15.6854 8.33311C15.1647 7.80051 14.4587 7.5009 13.7222 7.5Z" fill="#FF4297" />
+          </svg>,
+          text: "Liked By Owner",
+          backgroundColor: "#AD74FE40",
+          hoverBackgroundColor: "#332548",
+          borderColor: "#AD74FE",
+          textColor: "#AD74FE",
+        }
+      case "flagged":
+        return {
+          icon: <CircleMinus size={12} />,
+          text: "Flagged by Owner",
+          backgroundColor: "#5A5A6740",
+          hoverBackgroundColor: "#1E1E21",
+          borderColor: "#B3B3B3",
+          textColor: "#B3B3B3",
+        }
+      default:
+        return null
+    }
+  }
+
+  const config = getIndicatorConfig()
+  if (!config) return null
+
+  const isExpanded = iconOnly ? isHovered : true
+  const shouldShowText = !iconOnly || isHovered
+
+  return (
+    <div
+      className={`flex items-center text-[11px] font-medium transition-all duration-200 ease-in-out ${iconOnly ? "justify-center" : ""} ${className}`}
+      style={{
+        backgroundColor: iconOnly ? "transparent" : config.backgroundColor,
+        borderWidth: iconOnly ? "0px" : "0.5px",
+        borderStyle: "solid",
+        borderColor: config.borderColor,
+        color: config.textColor,
+        boxShadow: "0px 1px 2px 0px #00000050",
+        borderRadius: "6px",
+        paddingTop: iconOnly ? "0px" : "4px",
+        paddingRight: iconOnly ? "0px" : isExpanded ? "8px" : "4px",
+        paddingBottom: iconOnly ? "0px" : "4px",
+        paddingLeft: iconOnly ? "0px" : isExpanded ? "8px" : "4px",
+        gap: shouldShowText ? "4px" : "0px",
+        width: "fit-content",
+        height: "fit-content",
+        position: iconOnly ? "relative" : "static",
+        zIndex: iconOnly && isHovered ? 1 : "auto",
+      }}
+      onMouseEnter={() => iconOnly && setIsHovered(true)}
+      onMouseLeave={() => iconOnly && setIsHovered(false)}
+    >
+      <div style={{ color: config.textColor }}>{config.icon}</div>
+      <div
+        className="transition-all duration-200 ease-in-out"
+        style={{
+          width: shouldShowText ? "auto" : "0px",
+          overflow: "hidden",
+        }}
+      >
+        <span
+          className="inline-block transition-all duration-200 ease-in-out"
+          style={{
+            opacity: shouldShowText ? 1 : 0,
+            transform: shouldShowText ? "translateX(0)" : "translateX(20px)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {config.text}
+        </span>
+      </div>
+    </div>
+  )
+}

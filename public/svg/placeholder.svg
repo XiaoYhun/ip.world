@@ -1,0 +1,20 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="300"
+    height="200"
+    viewBox="0 0 300 200"
+    fill="none"
+>
+    <rect width="300" height="200" fill="#e0e0e0" />
+    <text
+        x="50%"
+        y="50%"
+        dominant-baseline="middle"
+        text-anchor="middle"
+        fill="#808080"
+        font-size="16"
+        font-family="Arial, sans-serif"
+    >
+        Image Not Found
+    </text>
+</svg>

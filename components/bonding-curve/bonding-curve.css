@@ -1,0 +1,39 @@
+@keyframes cmc-shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes cmc-glow {
+  0%, 100% { 
+    box-shadow: 0 0 12px #FC42FF55, 0 0 4px #FF429744; 
+    filter: brightness(1);
+  }
+  50% { 
+    box-shadow: 0 0 24px #FF429788, 0 0 48px #FC42FF44, 0 0 8px #C093FF44; 
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes cmc-edge-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.cmc-shimmer-layer {
+  animation: cmc-shimmer 1.8s linear infinite;
+}
+
+.cmc-glow-pulse {
+  animation: cmc-glow 2s ease-in-out infinite;
+}
+
+.cmc-edge-glow {
+  animation: cmc-edge-pulse 1.5s ease-in-out infinite;
+}
+
+/* Bar has a subtle inner glow */
+.cmc-bar {
+  box-shadow: 
+    inset 0 0 0 1px rgba(255,255,255,0.05),
+    0 0 8px rgba(192, 147, 255, 0.1);
+}

@@ -1,0 +1,15 @@
+name: Build and Deploy App (Dev)
+
+on:
+  push:
+    branches:
+      - dev-v2
+
+jobs:
+  build-and-deploy:
+    uses: ipdotworld/argocd/.github/workflows/build-deploy-dev.yaml@main
+    with:
+      app_name: ipworld-frontend
+      get_gcp_secret: true
+      gcp_secret_name: dev-ip-world-git-dev-client
+    secrets: inherit
