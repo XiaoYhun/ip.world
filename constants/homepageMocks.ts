@@ -28,6 +28,15 @@ const addressFor = (group: string, index: number) =>
 const PRICE_SERIES_POINTS = 28
 const PRICE_SERIES_BASE_MS = Date.UTC(2026, 6, 22)
 
+/**
+ * Spread creation dates so cards don't all render the same "358d ago" age.
+ * Fixed base date, same reason as the price series.
+ */
+const createdAtFor = (group: string, index: number) => {
+  const daysAgo = 2 + ((group.length * 5 + index * 11) % 84)
+  return new Date(PRICE_SERIES_BASE_MS - daysAgo * 86_400_000).toISOString()
+}
+
 const makePrice7d = (endPrice: number, changePct: number, seed: number) => {
   const startPrice = endPrice / (1 + changePct / 100 || 1)
   let state = seed * 9301 + 49297
@@ -84,6 +93,8 @@ const makeToken = (seed: TokenSeed, index: number, group: string): Remix => ({
   is_featured: index < 3,
   is_verified: index % 3 === 0,
   price_7d: makePrice7d(seed.priceUsd, seed.marketCapChange, group.length + index + seed.symbol.length),
+  created_at: createdAtFor(group, index),
+  token_created_at: createdAtFor(group, index),
   ip: {
     ...MOCK_TOKEN.ip,
     id: `${group}-ip-${index}`,

@@ -128,25 +128,30 @@ export default async function IpExplorePage(props: { searchParams: Promise<Searc
     getHomepageRemixesData(searchParams),
   ])
 
-  const usingMockData =
-    isEmpty(exploreData) &&
-    isEmpty(initialTrendingTokensData) &&
-    isEmpty(initialTiktokTokensData) &&
-    isEmpty(homepageRemixesData?.remixes)
+  // /explore can answer with a payload that is technically non-empty but carries
+  // none of the fields the hero reads, so check for the field we actually use.
+  const exploreIsEmpty =
+    isEmpty(exploreData) || (exploreData as { total_user_rewards?: number })?.total_user_rewards == null
+  const trendingIsEmpty = isEmpty(initialTrendingTokensData)
+  const graduatingIsEmpty = isEmpty(initialAboutToGraduateTokensData)
+  const tiktokIsEmpty = isEmpty(initialTiktokTokensData)
+  const remixesIsEmpty = isEmpty(homepageRemixesData?.remixes)
+
+  // Any substituted shelf means visitors are looking at invented numbers, so the
+  // notice has to appear even when the rest of the page is live.
+  const usingMockData = exploreIsEmpty || trendingIsEmpty || graduatingIsEmpty || tiktokIsEmpty || remixesIsEmpty
 
   return (
     <ClientContent
       usingMockData={usingMockData}
-      exploreData={isEmpty(exploreData) ? MOCK_EXPLORE : exploreData}
-      initialTrendingTokensData={isEmpty(initialTrendingTokensData) ? MOCK_TRENDING_TOKENS : initialTrendingTokensData}
+      exploreData={exploreIsEmpty ? MOCK_EXPLORE : exploreData}
+      initialTrendingTokensData={trendingIsEmpty ? MOCK_TRENDING_TOKENS : initialTrendingTokensData}
       initialAboutToGraduateTokensData={
-        isEmpty(initialAboutToGraduateTokensData) ? MOCK_ABOUT_TO_GRADUATE_TOKENS : initialAboutToGraduateTokensData
+        graduatingIsEmpty ? MOCK_ABOUT_TO_GRADUATE_TOKENS : initialAboutToGraduateTokensData
       }
-      initialTiktokTokensData={isEmpty(initialTiktokTokensData) ? MOCK_TIKTOK_TOKENS : initialTiktokTokensData}
+      initialTiktokTokensData={tiktokIsEmpty ? MOCK_TIKTOK_TOKENS : initialTiktokTokensData}
       homepageRemixesData={
-        isEmpty(homepageRemixesData?.remixes)
-          ? { remixes: MOCK_HOMEPAGE_REMIXES, total: MOCK_HOMEPAGE_REMIXES.length }
-          : homepageRemixesData
+        remixesIsEmpty ? { remixes: MOCK_HOMEPAGE_REMIXES, total: MOCK_HOMEPAGE_REMIXES.length } : homepageRemixesData
       }
     />
   )
