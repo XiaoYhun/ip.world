@@ -10,8 +10,24 @@ import { Remix } from "@/types/remix"
 import { HIDDEN_TRENDING_REMIXES } from "@/lib/constants"
 import { env } from "@/config"
 import { fetchRemixListThenHealSparklinesIfNeeded, parseHiddenFilteredRemixResults } from "@/lib/remix-sparkline-heal"
+import {
+  MOCK_ABOUT_TO_GRADUATE_TOKENS,
+  MOCK_EXPLORE,
+  MOCK_HOMEPAGE_REMIXES,
+  MOCK_TIKTOK_TOKENS,
+  MOCK_TRENDING_TOKENS,
+} from "@/constants/homepageMocks"
 
 export const revalidate = 30
+
+/**
+ * Every getter below degrades to an empty result when the API is unreachable,
+ * which renders the homepage as a bare "No tokens" shell. On deployments
+ * without backend access we substitute demo fixtures so the page still shows
+ * something, and surface DemoDataNotice so the figures aren't mistaken for real.
+ */
+const isEmpty = (value: unknown) =>
+  value == null || (Array.isArray(value) && value.length === 0) || (typeof value === "object" && Object.keys(value as object).length === 0)
 
 const getExploreData = async () => {
   try {
@@ -112,13 +128,26 @@ export default async function IpExplorePage(props: { searchParams: Promise<Searc
     getHomepageRemixesData(searchParams),
   ])
 
+  const usingMockData =
+    isEmpty(exploreData) &&
+    isEmpty(initialTrendingTokensData) &&
+    isEmpty(initialTiktokTokensData) &&
+    isEmpty(homepageRemixesData?.remixes)
+
   return (
     <ClientContent
-      exploreData={exploreData}
-      initialTrendingTokensData={initialTrendingTokensData}
-      initialAboutToGraduateTokensData={initialAboutToGraduateTokensData}
-      initialTiktokTokensData={initialTiktokTokensData}
-      homepageRemixesData={homepageRemixesData}
+      usingMockData={usingMockData}
+      exploreData={isEmpty(exploreData) ? MOCK_EXPLORE : exploreData}
+      initialTrendingTokensData={isEmpty(initialTrendingTokensData) ? MOCK_TRENDING_TOKENS : initialTrendingTokensData}
+      initialAboutToGraduateTokensData={
+        isEmpty(initialAboutToGraduateTokensData) ? MOCK_ABOUT_TO_GRADUATE_TOKENS : initialAboutToGraduateTokensData
+      }
+      initialTiktokTokensData={isEmpty(initialTiktokTokensData) ? MOCK_TIKTOK_TOKENS : initialTiktokTokensData}
+      homepageRemixesData={
+        isEmpty(homepageRemixesData?.remixes)
+          ? { remixes: MOCK_HOMEPAGE_REMIXES, total: MOCK_HOMEPAGE_REMIXES.length }
+          : homepageRemixesData
+      }
     />
   )
 }
