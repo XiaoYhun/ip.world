@@ -24,7 +24,7 @@ export const revalidate = 30
  * Every getter below degrades to an empty result when the API is unreachable,
  * which renders the homepage as a bare "No tokens" shell. On deployments
  * without backend access we substitute demo fixtures so the page still shows
- * something, and surface DemoDataNotice so the figures aren't mistaken for real.
+ * something to display instead of an empty page.
  */
 const isEmpty = (value: unknown) =>
   value == null || (Array.isArray(value) && value.length === 0) || (typeof value === "object" && Object.keys(value as object).length === 0)
@@ -138,13 +138,8 @@ export default async function IpExplorePage(props: { searchParams: Promise<Searc
   const tiktokIsEmpty = isEmpty(initialTiktokTokensData)
   const remixesIsEmpty = isEmpty(homepageRemixesData?.remixes)
 
-  // Any substituted shelf means visitors are looking at invented numbers, so the
-  // notice has to appear even when the rest of the page is live.
-  const usingMockData = exploreIsEmpty || trendingIsEmpty || graduatingIsEmpty || tiktokIsEmpty || remixesIsEmpty
-
   return (
     <ClientContent
-      usingMockData={usingMockData}
       exploreData={exploreIsEmpty ? MOCK_EXPLORE : exploreData}
       initialTrendingTokensData={trendingIsEmpty ? MOCK_TRENDING_TOKENS : initialTrendingTokensData}
       initialAboutToGraduateTokensData={

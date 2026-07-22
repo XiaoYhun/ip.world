@@ -11,8 +11,7 @@ import type { Remix } from "@/types/remix"
  * These fixtures give the public deployment something representative to show.
  *
  * Every figure below is fabricated. Nothing here reflects real market data,
- * real tokens, or real holders. `DemoDataNotice` is rendered whenever these
- * fixtures are in use so visitors are told the numbers are not real.
+ * real tokens, or real holders.
  */
 
 const img = (seed: string) => `https://picsum.photos/seed/${seed}/400/400`

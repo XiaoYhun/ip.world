@@ -6,7 +6,6 @@ import { Remix } from "@/types/remix"
 import { fetchRemixes } from "./actions"
 import RemixesClient from "./remixes-client"
 import { MOCK_COINS } from "@/constants/homepageMocks"
-import DemoDataNotice from "../components/demo-data-notice"
 
 const DEFAULT_SORT = "trending_score_24h"
 const DEFAULT_ORDER = "desc"
@@ -62,11 +61,6 @@ export default async function ExplorePage(props: { searchParams: Promise<SearchP
   return (
     <div className="relative mt-14 w-full md:mt-0">
       <section className="relative">
-        {usingMockData && (
-          <div className="w-full px-3 pb-4 sm:px-4">
-            <DemoDataNotice />
-          </div>
-        )}
         {!!heroRemix && !!heroRemix.token_address && (
           <div className="hidden sm:block">
             <FeaturedRemixCard data={heroRemix} />
